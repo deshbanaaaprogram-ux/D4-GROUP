@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>INFORMATION RAKYAT D4</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;700&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 50%, #000000 100%);
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* Efek liquid glass yang diperkaya */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 15% 30%, rgba(255, 255, 255, 0.08) 0%, transparent 25%),
+                radial-gradient(circle at 75% 15%, rgba(255, 255, 255, 0.06) 0%, transparent 22%),
+                radial-gradient(circle at 35% 75%, rgba(255, 255, 255, 0.07) 0%, transparent 28%),
+                radial-gradient(circle at 85% 65%, rgba(255, 255, 255, 0.05) 0%, transparent 20%),
+                radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.03) 0%, transparent 35%),
+                radial-gradient(circle at 25% 45%, rgba(255, 255, 255, 0.04) 0%, transparent 18%);
+            z-index: -1;
+        }
+        
+        /* Animasi awal */
+        .preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+        
+        .number-4 {
+            font-family: 'Cinzel', serif;
+            font-size: 25rem;
+            font-weight: 700;
+            color: #ffffff;
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.7);
+            animation: pulse 1.5s infinite alternate;
+            position: absolute;
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                text-shadow: 0 0 30px rgba(255, 255, 255, 0.7);
+            }
+            100% {
+                transform: scale(1.1);
+                text-shadow: 0 0 50px rgba(255, 255, 255, 1);
+            }
+        }
+        
+        @keyframes shrinkAndMove {
+            0% {
+                transform: scale(1) translate(0, 0);
+                opacity: 1;
+            }
+            70% {
+                transform: scale(0.1) translate(0, 0);
+                opacity: 0.7;
+            }
+            100% {
+                transform: scale(0.05) translate(250px, -120px);
+                opacity: 0;
+            }
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        .hidden {
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        
+        .visible {
+            opacity: 1;
+        }
+        
+        /* Animasi scroll */
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        
+        .fade-in-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            opacity: 0;
+            animation: fadeIn 1s ease forwards;
+            animation-delay: 2.5s;
+        }
+        
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            position: relative;
+        }
+        
+        .title {
+            font-family: 'Cinzel', serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            background: linear-gradient(to right, #ffffff, #d4d4d4);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 10px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .title::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            bottom: -10px;
+            left: 0;
+            background: linear-gradient(to right, transparent, #ffffff, transparent);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #cccccc;
+            font-weight: 300;
+            letter-spacing: 2px;
+            margin-top: 20px;
+        }
+        
+        /* Section untuk informasi warga */
+        .section-title {
+            font-family: 'Cinzel', serif;
+            font-size: 2.2rem;
+            text-align: center;
+            margin: 50px 0 30px;
+            color: #ffffff;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            width: 100px;
+            height: 1px;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(to right, transparent, #ffffff, transparent);
+        }
+        
+        /* Kartu informasi warga */
+        .residents-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+        
+        .resident-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .resident-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, transparent 100%);
+            z-index: 0;
+        }
+        
+        .resident-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .resident-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .resident-name {
+            font-family: 'Cinzel', serif;
+            font-size: 1.8rem;
+            font-weight: 500;
+            color: #ffffff;
+        }
+        
+        .status-badge {
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+        }
+        
+        .member {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4CAF50;
+            border: 1px solid rgba(76, 175, 80, 0.3);
+        }
+        
+        .admin {
+            background: rgba(255, 152, 0, 0.2);
+            color: #FF9800;
+            border: 1px solid rgba(255, 152, 0, 0.3);
+        }
+        
+        .commander {
+            background: rgba(156, 39, 176, 0.2);
+            color: #9C27B0;
+            border: 1px solid rgba(156, 39, 176, 0.3);
+        }
+        
+        .rarely-on {
+            background: rgba(33, 150, 243, 0.2);
+            color: #2196F3;
+            border: 1px solid rgba(33, 150, 243, 0.3);
+        }
+        
+        .ceo {
+            background: rgba(244, 67, 54, 0.2);
+            color: #F44336;
+            border: 1px solid rgba(244, 67, 54, 0.3);
+        }
+        
+        .resident-info {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .info-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            font-size: 1.05rem;
+        }
+        
+        .info-item i {
+            width: 25px;
+            margin-right: 10px;
+            color: #cccccc;
+            font-size: 1.1rem;
+        }
+        
+        .tiktok-link {
+            color: #25F4EE;
+            text-decoration: none;
+            transition: color 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+        
+        .tiktok-link:hover {
+            color: #ffffff;
+            text-decoration: underline;
+        }
+        
+        .character {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-style: italic;
+            color: #dddddd;
+            line-height: 1.6;
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Section untuk nilai-nilai */
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 60px;
+        }
+        
+        .value-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px 25px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .value-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .value-icon {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #ffffff;
+            height: 80px;
+            width: 80px;
+            line-height: 80px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .value-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #ffffff;
+        }
+        
+        .value-desc {
+            color: #cccccc;
+            line-height: 1.6;
+        }
+        
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: 50px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #aaaaaa;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+        
+        .copyright {
+            margin-top: 10px;
+            color: #777777;
+        }
+        
+        /* Responsif */
+        @media (max-width: 1100px) {
+            .residents-grid {
+                grid-template-columns: 1fr;
+                max-width: 800px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .title {
+                font-size: 2.5rem;
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+            
+            .resident-card {
+                padding: 20px;
+            }
+            
+            .resident-name {
+                font-size: 1.5rem;
+            }
+            
+            .number-4 {
+                font-size: 15rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .title {
+                font-size: 2rem;
+            }
+            
+            .values-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .resident-card-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .status-badge {
+                margin-top: 10px;
+            }
+            
+            .number-4 {
+                font-size: 10rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Preloader dengan animasi angka 4 -->
+    <div class="preloader" id="preloader">
+        <div class="number-4" id="number4">4</div>
+    </div>
+    
+    <div class="container">
+        <header>
+            <h1 class="title">INFORMATION RAKYAT D4</h1>
+            <p class="subtitle">Directory of Residents & Core Values</p>
+        </header>
+        
+        <section class="residents-section fade-in-up">
+            <h2 class="section-title">Informasi Warga</h2>
+            
+            <div class="residents-grid">
+                <!-- Kartu warga 1 -->
+                <div class="resident-card">
+                    <div class="resident-card-header">
+                        <h3 class="resident-name">Iza</h3>
+                        <span class="status-badge member">Member</span>
+                    </div>
+                    
+                    <div class="resident-info">
+                        <div class="info-item">
+                            <i class="fas fa-user"></i>
+                            <span>Nama: Iza</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-users"></i>
+                            <span>Status: Member</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fab fa-tiktok"></i>
+                            <span>TikTok: <a href="https://www.tiktok.com/@xyz_zaa39" target="_blank" class="tiktok-link">@xyz_zaa39</a></span>
+                        </div>
+                    </div>
+                    
+                    <div class="character">
+                        <i class="fas fa-quote-left" style="margin-right: 5px;"></i>
+                        Always be active in conversations/activities when gathering or chatting in a group.
+                    </div>
+                </div>
+                
+                <!-- Kartu warga 2 -->
+                <div class="resident-card">
+                    <div class="resident-card-header">
+                        <h3 class="resident-name">Misel</h3>
+                        <span class="status-badge admin">Group Admin</span>
+                    </div>
+                    
+                    <div class="resident-info">
+                        <div class="info-item">
+                            <i class="fas fa-user"></i>
+                            <span>Nama: Misel</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-users"></i>
+                            <span>Status: Group Admin</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fab fa-tiktok"></i>
+                            <span>TikTok: <a href="https://www.tiktok.com/@firatandezz01" target="_blank" class="tiktok-link">@firatandezz01</a></span>
+                        </div>
+                    </div>
+                    
+                    <div class="character">
+                        <i class="fas fa-quote-left" style="margin-right: 5px;"></i>
+                        Friendly even though sometimes his mouth often talks or speaks dirty.
+                    </div>
+                </div>
+                
+                <!-- Kartu warga 3 -->
+                <div class="resident-card">
+                    <div class="resident-card-header">
+                        <h3 class="resident-name">Krishna</h3>
+                        <span class="status-badge rarely-on">Member Rarely on</span>
+                    </div>
+                    
+                    <div class="resident-info">
+                        <div class="info-item">
+                            <i class="fas fa-user"></i>
+                            <span>Nama: Krishna</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-users"></i>
+                            <span>Status: Member Rarely on</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fab fa-tiktok"></i>
+                            <span>TikTok: Unknown (Privacy)</span>
+                        </div>
+                    </div>
+                    
+                    <div class="character">
+                        <i class="fas fa-quote-left" style="margin-right: 5px;"></i>
+                        Always joins in when there are gatherings, both morning and evening, he is a friendly person.
+                    </div>
+                </div>
+                
+                <!-- Kartu warga 4 -->
+                <div class="resident-card">
+                    <div class="resident-card-header">
+                        <h3 class="resident-name">Deo</h3>
+                        <span class="status-badge ceo">CEO IN THE SHADOWS</span>
+                    </div>
+                    
+                    <div class="resident-info">
+                        <div class="info-item">
+                            <i class="fas fa-user"></i>
+                            <span>Nama: Deo</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-users"></i>
+                            <span>Status: CEO IN THE SHADOWS</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fab fa-tiktok"></i>
+                            <span>TikTok: <a href="https://www.tiktok.com/@deshbanaaa_" target="_blank" class="tiktok-link">@deshbanaaa_</a></span>
+                        </div>
+                    </div>
+                    
+                    <div class="character">
+                        <i class="fas fa-quote-left" style="margin-right: 5px;"></i>
+                        He is friendly, kind, polite, smart, always participates in activities when we gather together in the morning or evening.
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="values-section fade-in-up">
+            <h2 class="section-title">Nilai-Nilai Rakyat D4</h2>
+            
+            <div class="values-grid">
+                <!-- Kotak nilai 1 -->
+                <div class="value-card">
+                    <div class="value-icon">
+                        <i class="fas fa-hands"></i>
+                    </div>
+                    <h3 class="value-title">MEMILIKI TATAKRAMA YANG BAGUS, SOPAN</h3>
+                    <p class="value-desc">Menjunjung tinggi nilai-nilai kesopanan dan tata krama dalam setiap interaksi dan kegiatan bersama.</p>
+                </div>
+                
+                <!-- Kotak nilai 2 -->
+                <div class="value-card">
+                    <div class="value-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3 class="value-title">AKAL CERDAS</h3>
+                    <p class="value-desc">Mengutamakan kecerdasan dalam berpikir dan bertindak untuk kebaikan bersama.</p>
+                </div>
+                
+                <!-- Kotak nilai 3 -->
+                <div class="value-card">
+                    <div class="value-icon">
+                        <i class="fas fa-lightbulb"></i>
+                    </div>
+                    <h3 class="value-title">KREATIF</h3>
+                    <p class="value-desc">Selalu mencari cara baru dan inovatif dalam menyelesaikan masalah dan menciptakan hal-hal positif.</p>
+                </div>
+                
+                <!-- Kotak nilai 4 (Baru) -->
+                <div class="value-card">
+                    <div class="value-icon">
+                        <i class="fas fa-handshake"></i>
+                    </div>
+                    <h3 class="value-title">SOLIDARITAS TINGGI</h3>
+                    <p class="value-desc">Selalu mendukung dan membantu sesama anggota dalam keadaan apapun tanpa pamrih.</p>
+                </div>
+                
+                <!-- Kotak nilai 5 (Baru) -->
+                <div class="value-card">
+                    <div class="value-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="value-title">SETIA KAWAN</h3>
+                    <p class="value-desc">Menjaga kepercayaan dan kesetiaan dalam persahabatan, baik dalam suka maupun duka.</p>
+                </div>
+                
+                <!-- Kotak nilai 6 (Baru) -->
+                <div class="value-card">
+                    <div class="value-icon">
+                        <i class="fas fa-fist-raised"></i>
+                    </div>
+                    <h3 class="value-title">SEMANGAT JUANG</h3>
+                    <p class="value-desc">Pantang menyerah dan selalu berusaha maksimal dalam mencapai tujuan bersama.</p>
+                </div>
+                
+                <!-- Kotak nilai 7 (Baru) -->
+                <div class="value-card">
+                    <div class="value-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h3 class="value-title">KEPEDULIAN SOSIAL</h3>
+                    <p class="value-desc">Memperhatikan dan membantu sesama, baik dalam lingkup kelompok maupun masyarakat luas.</p>
+                </div>
+                
+                <!-- Kotak nilai 8 (Baru) -->
+                <div class="value-card">
+                    <div class="value-icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <h3 class="value-title">KOMUNIKASI TERBUKA</h3>
+                    <p class="value-desc">Menjaga komunikasi yang jujur dan terbuka demi menghindari kesalahpahaman.</p>
+                </div>
+            </div>
+        </section>
+        
+        <footer class="fade-in-up">
+            <p>INFORMATION Rakyat D4</p>
+            <p class="copyright">© By : Deshbanaaa | 2026</p>
+        </footer>
+    </div>
+
+    <script>
+        // Animasi awal: angka 4 muncul, mengecil, dan bergabung dengan judul
+        document.addEventListener('DOMContentLoaded', function() {
+            const preloader = document.getElementById('preloader');
+            const number4 = document.getElementById('number4');
+            
+            // Animasi angka 4
+            setTimeout(() => {
+                number4.style.animation = 'shrinkAndMove 1.5s ease-in-out forwards';
+                
+                // Setelah animasi selesai, hapus preloader
+                setTimeout(() => {
+                    preloader.style.display = 'none';
+                    
+                    // Mulai animasi scroll untuk elemen
+                    animateOnScroll();
+                }, 1500);
+            }, 1500);
+            
+            // Efek interaktif sederhana untuk kartu saat dihover
+            const residentCards = document.querySelectorAll('.resident-card');
+            const valueCards = document.querySelectorAll('.value-card');
+            
+            // Tambahkan efek hover yang lebih halus
+            residentCards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-10px)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+            
+            valueCards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-5px)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+            
+            // Efek teks judul yang berkilau
+            const title = document.querySelector('.title');
+            let hue = 0;
+            
+            function updateTitleColor() {
+                hue = (hue + 0.5) % 360;
+                title.style.background = `linear-gradient(to right, hsl(${hue}, 100%, 85%), hsl(${(hue + 30) % 360}, 100%, 85%))`;
+                title.style.webkitBackgroundClip = 'text';
+                title.style.backgroundClip = 'text';
+                requestAnimationFrame(updateTitleColor);
+            }
+            
+            // Mulai animasi warna judul
+            updateTitleColor();
+            
+            // Fungsi untuk animasi scroll
+            function animateOnScroll() {
+                const elements = document.querySelectorAll('.fade-in-up');
+                
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                        }
+                    });
+                }, {
+                    threshold: 0.1,
+                    rootMargin: '0px 0px -50px 0px'
+                });
+                
+                elements.forEach(element => {
+                    observer.observe(element);
+                });
+            }
+            
+            // Tambahkan event listener untuk scroll
+            window.addEventListener('scroll', () => {
+                animateOnScroll();
+            });
+        });
+    </script>
+</body>
+</html>
